@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-mqtt
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+    app.kubernetes.io/part-of: mqtt
+    app.kubernetes.io/name: grafana-dashboard
+
+data:
+  mqtt-dashboard.json: |
+    {
+      "id": null,
+      "uid": "mqtt-pdm1106j",
+      "title": "MQTT - PDM1106J Metrics",
+      "tags": ["mqtt", "pdm1106j"],
+      "timezone": "browser",
+      "schemaVersion": 39,
+      "version": 1,
+      "refresh": "10s",
+      "panels": [
+        {
+          "type": "timeseries",
+          "title": "Voltage (V)",
+          "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8},
+          "fieldConfig": {"defaults": {"unit": "volt"}, "overrides": []},
+          "targets": [{
+            "expr": "pdm_metric_value{topic=\"PDM1106J/voltage\"}",
+            "legendFormat": "{{topic}}",
+            "refId": "A"
+          }]
+        },
+        {
+          "type": "timeseries",
+          "title": "Power (W)",
+          "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8},
+          "fieldConfig": {"defaults": {"unit": "watt"}, "overrides": []},
+          "targets": [{
+            "expr": "pdm_metric_value{topic=\"PDM1106J/power\"}",
+            "legendFormat": "{{topic}}",
+            "refId": "A"
+          }]
+        },
+        {
+          "type": "timeseries",
+          "title": "Current (A)",
+          "gridPos": {"x": 0, "y": 8, "w": 12, "h": 8},
+          "fieldConfig": {"defaults": {"unit": "ampere"}, "overrides": []},
+          "targets": [{
+            "expr": "pdm_metric_value{topic=\"PDM1106J/current\"}",
+            "legendFormat": "{{topic}}",
+            "refId": "A"
+          }]
+        },
+        {
+          "type": "timeseries",
+          "title": "Energy (kWh)",
+          "gridPos": {"x": 12, "y": 8, "w": 12, "h": 8},
+          "fieldConfig": {"defaults": {"unit": "kWh"}, "overrides": []},
+          "targets": [{
+            "expr": "pdm_metric_value{topic=\"PDM1106J/energy\"}",
+            "legendFormat": "{{topic}}",
+            "refId": "A"
+          }]
+        },
+        {
+          "type": "timeseries",
+          "title": "Power Factor",
+          "gridPos": {"x": 0, "y": 16, "w": 12, "h": 8},
+          "fieldConfig": {"defaults": {"unit": "percentunit", "min": 0, "max": 1}, "overrides": []},
+          "targets": [{
+            "expr": "pdm_metric_value{topic=\"PDM1106J/pf\"}",
+            "legendFormat": "{{topic}}",
+            "refId": "A"
+          }]
+        },
+        {
+          "type": "timeseries",
+          "title": "Frequency (Hz)",
+          "gridPos": {"x": 12, "y": 16, "w": 12, "h": 8},
+          "fieldConfig": {"defaults": {"unit": "hertz"}, "overrides": []},
+          "targets": [{
+            "expr": "pdm_metric_value{topic=\"PDM1106J/fr\"}",
+            "legendFormat": "{{topic}}",
+            "refId": "A"
+          }]
+        }
+      ],
+      "time": {"from": "now-6h", "to": "now"},
+      "templating": {"list": []}
+    }

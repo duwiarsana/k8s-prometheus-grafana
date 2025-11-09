@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telegraf-mqtt-config
+  namespace: monitoring
+
+data:
+  telegraf.conf: |
+    [agent]
+      interval = "10s"
+      round_interval = true
+      metric_batch_size = 1000
+      metric_buffer_limit = 10000
+      collection_jitter = "0s"
+      flush_interval = "10s"
+      flush_jitter = "0s"
+      logfile = ""
+      hostname = ""
+
+    [[inputs.mqtt_consumer]]
+      servers = ["tcp://202.74.74.42:1883"]
+      topics = [
+        "PDM1106J/voltage",
+        "PDM1106J/power",
+        "PDM1106J/current",
+        "PDM1106J/energy",
+        "PDM1106J/pf",
+        "PDM1106J/fr"
+      ]
+      qos = 0
+      connection_timeout = "30s"
+      persistent_session = false
+      client_id = "telegraf-mqtt"
+      data_format = "value"
+      data_type = "float"
+      name_override = "pdm_metric"
+      topic_tag = "topic"
+
+    [[outputs.prometheus_client]]
+      listen = ":9273"
+      metric_version = 2
+      path = "/metrics"
+      expiration_interval = "60s"

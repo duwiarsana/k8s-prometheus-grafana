@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mqtt-exporter-config
+  namespace: monitoring
+
+data:
+  config.yml: |
+    mqtt:
+      host: 202.74.74.42
+      port: 1883
+      # username: ""
+      # password: ""
+      qos: 0
+      keepalive: 60
+      client_id: "mqtt-exporter"
+
+    # Prometheus HTTP server
+    exporter:
+      listen: ":9344"
+      path: "/metrics"
+
+    # Metrics mapping: assume payload is numeric per topic
+    metrics:
+      - name: mqtt_pdm_voltage_volts
+        help: Voltage reading from PDM1106J
+        type: gauge
+        topic: "PDM1106J/voltage"
+      - name: mqtt_pdm_power_watts
+        help: Power reading from PDM1106J
+        type: gauge
+        topic: "PDM1106J/power"
+      - name: mqtt_pdm_current_amps
+        help: Current reading from PDM1106J
+        type: gauge
+        topic: "PDM1106J/current"
+      - name: mqtt_pdm_energy_kwh
+        help: Energy reading from PDM1106J
+        type: gauge
+        topic: "PDM1106J/energy"
+      - name: mqtt_pdm_pf
+        help: Power factor from PDM1106J
+        type: gauge
+        topic: "PDM1106J/pf"
+      - name: mqtt_pdm_frequency_hz
+        help: Frequency from PDM1106J
+        type: gauge
+        topic: "PDM1106J/fr"
